@@ -22,6 +22,12 @@ Or install it yourself as:
 
 ## Usage
 
+```ruby
+# spec/spec_helper.rb
+
+require "pipekit/webmock"
+```
+
 To use `pipekit` you will need a dummy Pipedrive config for your tests. Create a file with Pipedrive field mapping in `spec/support/config.yml`. Then add the following to your `spec_helper`:
 
 ```ruby
