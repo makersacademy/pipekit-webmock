@@ -1,0 +1,15 @@
+api_token: 123456
+request_all_pages: false
+fields:
+  person:
+    middle_name: 123abc
+    custom_field: 99912a
+  deal:
+    stage: 456sdf
+field_values:
+  person:
+    custom_field:
+      99: custom_value
+  deal:
+    stage:
+      23: 1st Contact
