@@ -1,8 +1,8 @@
-# Pipekit::Webmock
+# pipekit-webmock
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/pipekit/webmock`. To experiment with that code, run `bin/console` for an interactive prompt.
+This is a [WebMock](https://github.com/bblimke/webmock) extension to stub requests to [Pipedrive](http://www.pipedrive.com) with the [pipekit](https://github.com/makersacademy/pipekit) gem.
 
-TODO: Delete this and the text above, and describe your gem
+It provides a `stub_pipedrive_request` method and readable error messages for unregistered requests.
 
 ## Installation
 
@@ -22,7 +22,82 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To use `pipekit` you will need a dummy Pipedrive config for your tests. Create a file with Pipedrive field mapping in `spec/support/config.yml`. Then add the following to your `spec_helper`:
+
+```ruby
+# Dummy config data
+Pipekit.config_file_path = File.join(File.dirname(__FILE__), "support", "config.yml")
+```
+
+To stub requests to Pipedrive use `stub_pipedrive_request` method where you would normally use `WebMock`'s `stub_request` with the following params:
+
+- `resource` - what "entity" is request made to. Possible values are:
+  - `:person`
+  - `:deal`
+  - `:note`
+  - `:personField`
+- `action`:
+  - `:get` - Stubs a `GET` request to get resource by id or a query string.
+  - `:create` - Stubs a `POST` request to create a resource.
+  - `:update` - Stubs a `PUT` request to update the resource. `params` hash should include `id`.
+  - `:search` - Stubs a `GET` request to the `searchResults` endpoint.
+  - `:find_by_person_id` - Only for the `deal` resource. Stubs a `GET` request to `persons/:id/deals` on Pipedrive.
+  - `:find_by_email` - Only for the `person` resource. Stubs a `GET` request to `persons` with `search_by_email=1` query param on Pipedrive.
+  - `:find_by_name` - Only for the `person` resource. Stubs a `GET` request to `persons` on Pipedrive.
+- `params` - a hash of parameters. Could be either a query string (for `GET` requests) or a body (for `POST` and `PUT`) requests. For `update` action must include `:id` (as a symbol). Custom Pipedrive fields **don't** have to be converted to their Pipedrive ids.
+- `response` - what stubbed request should return. Note that most `GET` requests return an array, even if there's only one match.
+
+## Examples
+
+```ruby
+stub_pipedrive_request(
+  resource: :person,
+  action: :create,
+  params: {
+    "email" => "octocat@github.com",
+    "name" => "Octocat",
+    "middle_name" => "Purr" # custom Pipedrive field
+  },
+  response: {id: 123}
+)
+
+stub_pipedrive_request(
+  resource: :deal,
+  action: :update,
+  params: {
+    id: 123,
+    stage: "1st Contact"
+  },
+  response: {id: 123}
+)
+
+stub_pipedrive_request(
+  resource: :person,
+  action: :find_by_email,
+  params: {
+    email: "octocat@gmail.com"
+  }
+  response: [{id: 123}] # notice the array
+)
+
+stub_pipedrive_request(
+  resource: :deal,
+  action: :find_by_person_id,
+  params: {
+    person_id: 123
+  },
+  response: [{id: 345}]
+)
+
+stub_pipedrive_request(
+  resource: :person,
+  action: :search,
+  params: {
+    "Middle name" => "Purr" # custom Pipedrive field
+  },
+  response: [{id: 123}]
+)
+```
 
 ## Development
 
