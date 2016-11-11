@@ -1,3 +1,5 @@
+require "spec_helper"
+
 RSpec.describe "Pipekit WebMock stubs" do
   ::WebMock.enable!
   include Pipekit::WebMock::API
@@ -73,7 +75,7 @@ RSpec.describe "Pipekit WebMock stubs" do
   end
 
   it "should throw a readable error if a different request was sent" do
-    error_message = %r(Unregistered request to Pipedrive: https://api.pipedrive.com:443/v1/persons\?api_token=123456
+    error_message = %r(Unregistered request to Pipedrive: POST https://api.pipedrive.com/v1/persons\?api_token=123456 with body 'email=octocat%40github.com&name=John%20Doe&99912a=99' with headers {'Accept'=>'\*/\*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Ruby'}
 
 with params:
 
