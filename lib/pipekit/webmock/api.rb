@@ -60,7 +60,7 @@ module Pipekit
 
         def stub_get_request(params)
           id = params.delete(:id)
-          uri = "#{resource_uri(id)}&#{body_from(pagination_params)}"
+          uri = "#{resource_uri(id)}&#{body_from(params)}&#{body_from(pagination_params)}"
           stub_request(:get, uri)
         end
 

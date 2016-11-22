@@ -36,7 +36,7 @@ describe Pipekit::WebMock::API do
     remove_request_stub(stub_update)
   end
 
-  it "registers WebMock stub for retreiving a person by id" do
+  it "registers WebMock stub for retrieving a person by id" do
     stub_get = stub_pipedrive_request(
       resource: :person,
       action: :get,
@@ -45,6 +45,20 @@ describe Pipekit::WebMock::API do
 
     actual_request_pattern = WebMock::StubRegistry.instance.request_stubs.first.request_pattern
     expected_request_pattern = "GET https://api.pipedrive.com/v1/persons/123?api_token=123456&limit=500&start=0"
+
+    expect(actual_request_pattern.to_s).to eq(expected_request_pattern)
+    remove_request_stub(stub_get)
+  end
+
+  it "registers WebMock stub for retrieving deals by filter id" do
+    stub_get = stub_pipedrive_request(
+      resource: :deal,
+      action: :get,
+      params: {filter_id: 1}
+    )
+
+    actual_request_pattern = WebMock::StubRegistry.instance.request_stubs.first.request_pattern
+    expected_request_pattern = "GET https://api.pipedrive.com/v1/deals?api_token=123456&filter_id=1&limit=500&start=0"
 
     expect(actual_request_pattern.to_s).to eq(expected_request_pattern)
     remove_request_stub(stub_get)
