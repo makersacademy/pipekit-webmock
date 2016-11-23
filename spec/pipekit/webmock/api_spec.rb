@@ -142,6 +142,27 @@ describe Pipekit::WebMock::API do
     remove_request_stub(stub_create)
   end
 
+  it "understands both :id and 'id' key in params" do
+    stub_get_symbol = stub_pipedrive_request(
+      resource: :deal,
+      action: :get,
+      params: {id: 1}
+    )
+
+    stub_get_string = stub_pipedrive_request(
+      resource: :deal,
+      action: :get,
+      params: {"id" => 1}
+    )
+
+    request_pattern1 = WebMock::StubRegistry.instance.request_stubs[0].request_pattern
+    request_pattern2 = WebMock::StubRegistry.instance.request_stubs[1].request_pattern
+
+    expect(request_pattern1.to_s).to eq(request_pattern2.to_s)
+    remove_request_stub(stub_get_symbol)
+    remove_request_stub(stub_get_string)
+  end
+
   private
 
   def api_token

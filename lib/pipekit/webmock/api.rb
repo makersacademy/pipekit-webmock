@@ -54,12 +54,12 @@ module Pipekit
         end
 
         def stub_update_request(params)
-          id = params.delete(:id)
+          id = params.delete(:id) || params.delete("id")
           stub_request(:put, resource_uri(id)).with(body: body_from(params))
         end
 
         def stub_get_request(params)
-          id = params.delete(:id)
+          id = params.delete(:id) || params.delete("id")
           uri = "#{resource_uri(id)}&#{body_from(params)}&#{body_from(pagination_params)}"
           stub_request(:get, uri)
         end
