@@ -1,6 +1,7 @@
 require "spec_helper"
 
 RSpec.describe "Pipekit WebMock stubs" do
+  include WebMock::API
   ::WebMock.enable!
   include Pipekit::WebMock::API
 
@@ -104,5 +105,13 @@ custom_field: custom_value
       "custom_field" => "custom_value"}
 
     expect { person_repo.create(actual_person_params) }.to raise_error(error_message)
+  end
+
+  it "should throw an original WebMock error message if the unknown request was made NOT to Pipedrive" do
+    error_message = %r(Real HTTP connections are disabled. Unregistered request: GET http://http//google.com:80/ with headers {'Accept'=>'\*/\*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Ruby'})
+
+    stub_request(:post, "http://google.com")
+
+    expect { Net::HTTP.get("http://google.com", "/") }.to raise_error(error_message)
   end
 end
