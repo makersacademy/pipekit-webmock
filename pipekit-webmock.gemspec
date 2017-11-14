@@ -6,8 +6,8 @@ require 'pipekit/webmock/version'
 Gem::Specification.new do |spec|
   spec.name          = "pipekit-webmock"
   spec.version       = Pipekit::WebMock::VERSION
-  spec.authors       = ["jafrog"]
-  spec.email         = ["howeveririna@gmail.com"]
+  spec.authors       = ["jafrog", "makersacademy"]
+  spec.email         = ["dev@makersacademy.com"]
 
   spec.summary       = %q{WebMock extension for requests to Pipedrive}
   spec.description   = %q{Registers a `stub_pipedrive_request` method and makes unregistered request error messages more readable}
@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "webmock", "~>2.1"
-  spec.add_dependency "pipekit", "~>2.0"
+  spec.add_dependency "pipekit", "~>2.1.1"
   spec.add_dependency "rack"
 
   spec.add_development_dependency "bundler", "~> 1.13"
