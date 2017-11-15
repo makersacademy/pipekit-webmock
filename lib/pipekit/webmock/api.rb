@@ -17,6 +17,7 @@
 # end
 require "webmock"
 require "pipekit/webmock/errors"
+require "pipekit/webmock/resource_name"
 
 module Pipekit
   module WebMock
@@ -38,7 +39,8 @@ module Pipekit
         include ::WebMock::API
 
         def initialize(resource)
-          @request = Pipekit::Request.new(resource)
+          resource_name = ResourceName.new(resource)
+          @request = Pipekit::Request.new(resource_name)
         end
 
         def stub_request_and_response(action, params, response)
