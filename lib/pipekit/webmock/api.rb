@@ -37,9 +37,20 @@ module Pipekit
       class StubRequest
         include ::WebMock::API
 
+        RESOURCES = {
+          person:      { singular: "person",      pluralized: "persons"     },
+          deal:        { singular: "deal",        pluralized: "deals"       },
+          note:        { singular: "note",        pluralized: "notes"       },
+          personField: { singular: "personField", pluralized: "personFields"}
+        }
+
         def initialize(resource)
-          @request = Pipekit::Request.new(resource)
+          resource_label = ResourceLabel.new(RESOURCES[resource][:singular], RESOURCES[resource][:pluralized])
+          @request = Pipekit::Request.new(resource_label)
         end
+
+        # In Pipekit resources are now an object that return a singular or pluralized value
+        ResourceLabel = Struct.new(:singular, :pluralized)
 
         def stub_request_and_response(action, params, response)
           request = self.send("stub_#{action}_request", params)
