@@ -41,6 +41,7 @@ To stub requests to Pipedrive use `stub_pipedrive_request` method where you woul
   - `:person`
   - `:deal`
   - `:note`
+  - `:activity`
   - `:personField`
 - `action`:
   - `:get` - Stubs a `GET` request to get resource by id or a query string.
@@ -103,6 +104,23 @@ stub_pipedrive_request(
   },
   response: [{id: 123}]
 )
+
+stub_pipedrive_request(
+  resource: :activity,
+  action: :create,
+  params: {
+    :deal_id=>123,
+    :person_id=>321,
+    :subject=>"Interview Completed",
+    :due_date=>"2017:11:14",
+    :due_time=>"14:30",
+    :duration=>"00:45",
+    :done=>1,
+    :type=>"pairing_session",
+    :note=>"Super cool cat!\n - Interviewed by: Octocat"
+  },
+  response: {id: 123
+)
 ```
 
 ## Development
@@ -119,4 +137,3 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/[USERN
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
