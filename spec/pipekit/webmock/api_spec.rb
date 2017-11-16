@@ -20,6 +20,30 @@ describe Pipekit::WebMock::API do
     remove_request_stub(stub_create)
   end
 
+  it "registers a WebMock stub for creating an activity" do
+    stub_create = stub_pipedrive_request(
+      resource: :activity,
+      action: :create,
+      params: {
+                :deal_id=>123,
+                :person_id=>123,
+                :subject=>"Interview Completed",
+                :due_date=>"2017:11:14",
+                :due_time=>"14:30",
+                :duration=>"00:45",
+                :done=>1,
+                :type=>"pairing_session",
+                :note=>'Foo bar\n - Interviewed by: Octocat'
+              }
+    )
+
+    actual_request_pattern = WebMock::StubRegistry.instance.request_stubs.first.request_pattern
+    expected_request_pattern = "POST https://api.pipedrive.com/v1/activities?api_token=123456 with body \"deal_id=123&person_id=123&subject=Interview%20Completed&due_date=2017%3A11%3A14&due_time=14%3A30&duration=00%3A45&done=1&type=pairing_session&note=Foo%20bar%5Cn%20-%20Interviewed%20by%3A%20Octocat\""
+    expect(actual_request_pattern.to_s).to eq(expected_request_pattern)
+
+    remove_request_stub(stub_create)
+  end
+
   it "registers a WebMock stub for updating a deal" do
     deal_params = {id: 123, stage: "1st Contact"}
 
