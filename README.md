@@ -112,7 +112,7 @@ stub_pipedrive_request(
     :deal_id=>123,
     :person_id=>321,
     :subject=>"Interview Completed",
-    :due_date=>"2017:11:14",
+    :due_date=>"2017-11-14",
     :due_time=>"14:30",
     :duration=>"00:45",
     :done=>1,
